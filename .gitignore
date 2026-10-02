@@ -1,0 +1,27 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+kubeconfig*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Data and model artifacts (keep the repo light)
+data/
+*.gguf
+*.safetensors
+*.parquet
+
+# Local tool state
+.DS_Store
+.idea/
+.vscode/
+.claude/settings.local.json

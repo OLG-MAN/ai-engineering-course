@@ -1,0 +1,23 @@
+name: links
+
+# Course platforms move lessons around; catch dead links in the plan early.
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["PLAN.md", "onboarding.md", "README.md"]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/check_links.py PLAN.md onboarding.md README.md
