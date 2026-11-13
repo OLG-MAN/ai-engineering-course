@@ -30,9 +30,34 @@ The previous self-built plan (13 weeks across 5 course platforms) is archived on
 git clone https://github.com/rohitg00/ai-engineering-from-scratch.git ../ai-engineering-from-scratch
 
 cp .env.example .env
-pre-commit install
-python3 scripts/check_track.py
+make sh                          # lab container, see below
+pre-commit install               # inside the container
+python scripts/check_track.py
 ```
+
+## Lab container
+
+All lesson code runs in one OrbStack container: Python 3.12 + uv venv (`/opt/venv`), kubectl, pre-commit, git. Files: [.devcontainer/](.devcontainer/), packages in [requirements.txt](requirements.txt).
+
+| Path in container | What | Mode |
+| --- | --- | --- |
+| `/workspace/ai-engineering-course` | this repo | read-write |
+| `/workspace/ai-engineering-from-scratch` | course clone (`../ai-engineering-from-scratch`) | read-only |
+| `/cache` | tiktoken / Hugging Face / uv / pre-commit downloads (named volume) | survives `down` and rebuilds |
+
+kubectl inside talks to OrbStack's Kubernetes: the entrypoint copies `~/.kube/config` and points the `orbstack` cluster at `https://kubernetes.default.svc.cluster.local`. `.env` is loaded if present.
+
+**Day to day** (from the repo root on the Mac):
+
+```bash
+make sh        # start (builds the first time, ~1 min) and open a shell; `exit` leaves it running
+make down      # end of day: stop and remove the container; code and caches stay
+make status    # is it up, and can it reach the cluster?
+make rebuild   # after editing requirements.txt or the Dockerfile
+make nuke      # remove container, image and caches (start fresh)
+```
+
+Or in VS Code: "Dev Containers: Reopen in Container" (needs the Dev Containers extension) uses the same compose file and stops it when the window closes.
 
 ## How I work a lesson
 

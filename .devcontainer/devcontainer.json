@@ -1,0 +1,16 @@
+{
+  "name": "AI course lab",
+  "dockerComposeFile": "compose.yaml",
+  "service": "lab",
+  "workspaceFolder": "/workspace/ai-engineering-course",
+  "remoteUser": "dev",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"],
+      "settings": {
+        "python.defaultInterpreterPath": "/opt/venv/bin/python"
+      }
+    }
+  }
+}

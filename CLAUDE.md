@@ -31,6 +31,10 @@ Senior systems/DevOps engineer (5+ yrs): Python, bash, GCP (Professional Cloud A
 
 Keep the table format (status, ID, linked title, minutes, notes). When upstream renames or removes a lesson, update the link and title. Keep the schedule and the GCP milestone references in sync with `gcp/README.md`.
 
+## Lab container
+
+Lesson code runs in the `aicourse-lab` container (`.devcontainer/`, `make sh|down|status|rebuild`), not on the Mac host: the host's `python3` is Xcode's 3.9 and the learner keeps the host free of dev tools. Run commands with `docker compose -f .devcontainer/compose.yaml exec -T lab bash -c '…'`. Python packages go in `requirements.txt` (then `make rebuild`); stable CLI tools go in the Dockerfile, pinned. gcloud and Terraform get added at G1.
+
 ## Checks
 
 - `pre-commit run --all-files` — whitespace, YAML, large files, private keys, gitleaks.

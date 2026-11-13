@@ -1,0 +1,4 @@
+# Python packages for lesson code, installed into the lab container (/opt/venv).
+# Add packages as lessons need them, then `make rebuild`.
+tiktoken
+tokenizers

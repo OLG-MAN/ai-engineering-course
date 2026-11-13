@@ -1,0 +1,28 @@
+name: aicourse
+
+services:
+  lab:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    image: aicourse-lab:latest
+    container_name: aicourse-lab
+    hostname: aicourse-lab
+    working_dir: /workspace/ai-engineering-course
+    volumes:
+      - ..:/workspace/ai-engineering-course                                     # this repo, read-write
+      - ../../ai-engineering-from-scratch:/workspace/ai-engineering-from-scratch:ro  # course clone, read-only
+      - ~/.kube:/mnt/host-kube:ro                                               # rewritten by entrypoint.sh
+      - ~/.gitconfig:/home/dev/.gitconfig:ro
+      - cache:/cache                                                            # downloads survive rebuilds
+    environment:
+      HF_HOME: /cache/hf
+      TIKTOKEN_CACHE_DIR: /cache/tiktoken
+      UV_CACHE_DIR: /cache/uv
+      PRE_COMMIT_HOME: /cache/pre-commit
+    env_file:
+      - path: ../.env
+        required: false
+
+volumes:
+  cache:
