@@ -4,13 +4,14 @@ Working repo for the learner's path through the upstream course [AI Engineering 
 
 ## Key files
 
-- `TRACK.md` — source of truth: curated lessons by stage, schedule, status. Lesson links point at a pinned upstream commit.
+- `TRACK.md` — source of truth: curated lessons by stage, schedule, status. Lesson links go to the course website (`https://aiengineeringfromscratch.com/learn/<phase>/<lesson>`, repo dir names minus the `NN-` prefixes); the learner reads and copies code from there.
 - `gcp/README.md` — GCP milestones G1–G6: what to build, which lessons each one upgrades, "done when".
 - `LOG.md` — weekly reviews, newest on top.
 - `lessons/p<NN>-<LL>/` — the learner's notes (`NOTES.md`) and code per lesson. `gcp/g<N>-<slug>/` — one folder per milestone, with its own Terraform stack.
 - `templates/` — `lesson.md`, `gcp-milestone.md`, `weekly-review.md`.
-- `scripts/check_track.py` — checks TRACK.md lesson paths exist at upstream HEAD.
-- Upstream is expected as a sibling clone at `../ai-engineering-from-scratch`. Read lessons from there; never vendor upstream files into this repo.
+- `scripts/check_track.py` — checks TRACK.md lesson links still resolve on the website (404 = renamed/removed upstream).
+- Upstream is also cloned as a sibling at `../ai-engineering-from-scratch` (full `code/`, `quiz.json`, `outputs/`). Read lessons there when helping; never vendor upstream files into this repo or edit the clone.
+- `lessons/<id>/GUIDE.md` — Claude's companion guide for a lesson (focus points, errata in the upstream text, the "make it real" task). The learner reads it only when stuck; keep it short.
 
 ## Learner
 
@@ -28,10 +29,10 @@ Senior systems/DevOps engineer (5+ yrs): Python, bash, GCP (Professional Cloud A
 
 ## Editing TRACK.md
 
-Keep the table format (status, ID, linked title, minutes, notes). When upstream renames or removes a lesson, update the path and title and re-pin all links to the new upstream commit. Keep the schedule and the GCP milestone references in sync with `gcp/README.md`.
+Keep the table format (status, ID, linked title, minutes, notes). When upstream renames or removes a lesson, update the link and title. Keep the schedule and the GCP milestone references in sync with `gcp/README.md`.
 
 ## Checks
 
 - `pre-commit run --all-files` — whitespace, YAML, large files, private keys, gitleaks.
-- `python3 scripts/check_track.py --upstream ../ai-engineering-from-scratch` — exit 1 if a linked lesson is gone upstream.
+- `python3 scripts/check_track.py` — exit 1 if a linked lesson returns 404 on the website.
 - CI: `.github/workflows/ci.yml` (pre-commit on push/PR), `track.yml` (weekly + on TRACK.md changes).

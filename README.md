@@ -19,7 +19,7 @@ The previous self-built plan (13 weeks across 5 course platforms) is archived on
 ├── lessons/<id>/       # one folder per lesson I do: NOTES.md + my code (id = p<phase>-<lesson>, e.g. p11-06)
 ├── gcp/                # GCP track: milestone plan + one folder per milestone (g1-… to g6-…)
 ├── templates/          # lesson notes, GCP milestone, weekly review
-├── scripts/check_track.py   # checks TRACK.md lesson paths still exist upstream
+├── scripts/check_track.py   # checks TRACK.md lesson links still resolve on the course website
 └── .github/workflows/  # ci (pre-commit + gitleaks), track (weekly upstream drift check)
 ```
 
@@ -31,13 +31,13 @@ git clone https://github.com/rohitg00/ai-engineering-from-scratch.git ../ai-engi
 
 cp .env.example .env
 pre-commit install
-python3 scripts/check_track.py --upstream ../ai-engineering-from-scratch
+python3 scripts/check_track.py
 ```
 
 ## How I work a lesson
 
-1. **Read** `docs/en.md` of the lesson in the upstream clone. Take the quiz (`quiz.json`) after.
-2. **Type** the lesson code into `lessons/<id>/` rather than copying it, and run it.
+1. **Read** the lesson on the course website (link in TRACK.md: styled, with figures and widgets). The local clone has the full `code/`, `quiz.json` and `outputs/` when I need them.
+2. **Build** the lesson code from its "Build It" section in `lessons/<id>/`, and run it.
 3. **Make it real:** replace the stub with a real model or service, through an OpenAI-compatible client (hosted, Vertex AI, vLLM or Ollama, set in `.env`). Record numbers: tokens, latency, cost, quality.
 4. **Write** `lessons/<id>/NOTES.md` in my own words from [templates/lesson.md](templates/lesson.md), then tick the lesson in TRACK.md.
 5. **Ship** the GCP milestone at the end of each stage, in `gcp/g<N>-<slug>/`.
@@ -45,8 +45,8 @@ python3 scripts/check_track.py --upstream ../ai-engineering-from-scratch
 
 ## Rules I keep
 
-- **Notes in my own words.** Upstream code is MIT, so I may reuse it with attribution, but I type it and change it rather than copy whole lessons.
-- **Upstream stays upstream.** I don't vendor upstream files here; TRACK.md links to a pinned upstream commit, and CI flags lessons that were renamed or removed upstream.
+- **Notes in my own words.** Upstream code is MIT, so I may reuse it with attribution; the value I add is in changing and extending it.
+- **Upstream stays upstream.** I don't vendor upstream files here and never edit the upstream clone, so `git pull` there never conflicts. CI flags TRACK.md links that stopped resolving on the website.
 - **Model-agnostic by default:** code talks to an OpenAI-compatible API unless a lesson or GCP milestone is explicitly vendor-specific.
 - **No secrets in git:** keys live in `.env`; pre-commit runs gitleaks. GCP auth via ADC locally and Workload Identity in GKE/Cloud Run, never key files.
 - **Cloud spend is capped:** budget alerts on, everything in Terraform, `terraform destroy` at the end of every session that created billable resources.

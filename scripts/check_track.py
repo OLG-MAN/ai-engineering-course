@@ -1,60 +1,61 @@
 #!/usr/bin/env python3
-"""Check that every upstream lesson linked in TRACK.md still exists upstream.
+"""Check that every course lesson linked in TRACK.md still resolves on the course website.
 
-Usage:
-  python3 scripts/check_track.py                      # shallow-clones upstream into a temp dir
-  python3 scripts/check_track.py --upstream ../ai-engineering-from-scratch   # use a local clone (git pull it first)
+Usage: python3 scripts/check_track.py [--track TRACK.md]
 
-Exit 1 if a linked lesson path is missing at upstream HEAD (renamed or removed): fix TRACK.md and re-pin.
+Exit 1 if a lesson link returns 404/410 (renamed or removed upstream): fix TRACK.md.
+Other HTTP errors and network failures are warnings, so a flaky site doesn't fail CI.
 Stdlib only.
 """
 import argparse
 import re
-import subprocess
 import sys
-import tempfile
+import urllib.error
+import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-REPO = "https://github.com/rohitg00/ai-engineering-from-scratch"
-LINK_RE = re.compile(re.escape(REPO) + r"/tree/([0-9a-f]{7,40})/(phases/[^)\s#]+)")
+SITE = "https://aiengineeringfromscratch.com/learn/"
+LINK_RE = re.compile(re.escape(SITE) + r"[a-z0-9-]+/[a-z0-9-]+")
+UA = "Mozilla/5.0 (track-check)"
+DEAD = {404, 410}
 
 
-def git(*args):
-    return subprocess.run(["git", *args], check=True, capture_output=True, text=True).stdout
-
-
-def upstream_dirs(root):
-    head = git("-C", root, "rev-parse", "HEAD").strip()
-    dirs = set(git("-C", root, "ls-tree", "-r", "-d", "--name-only", "HEAD", "phases").split())
-    return head, dirs
+def status(url):
+    for method in ("HEAD", "GET"):
+        req = urllib.request.Request(url, method=method, headers={"User-Agent": UA})
+        try:
+            with urllib.request.urlopen(req, timeout=20) as r:
+                return url, r.status
+        except urllib.error.HTTPError as e:
+            if e.code in (405, 501) and method == "HEAD":
+                continue
+            return url, e.code
+        except (urllib.error.URLError, TimeoutError, OSError) as e:
+            return url, f"error: {e}"
+    return url, "error: no response"
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--upstream", help="path to a local clone of the upstream repo")
     ap.add_argument("--track", default=str(Path(__file__).resolve().parent.parent / "TRACK.md"))
     args = ap.parse_args()
 
-    links = LINK_RE.findall(Path(args.track).read_text(encoding="utf-8"))
-    if not links:
-        sys.exit("no upstream lesson links found in TRACK.md")
-    pins = {sha for sha, _ in links}
-    paths = sorted({p.rstrip("/") for _, p in links})
+    urls = sorted(set(LINK_RE.findall(Path(args.track).read_text(encoding="utf-8"))))
+    if not urls:
+        sys.exit("no lesson links found in TRACK.md")
 
-    if args.upstream:
-        head, dirs = upstream_dirs(args.upstream)
-    else:
-        with tempfile.TemporaryDirectory() as tmp:
-            git("clone", "-q", "--depth", "1", "--filter=blob:none", "--no-checkout", REPO + ".git", tmp)
-            head, dirs = upstream_dirs(tmp)
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        results = list(pool.map(status, urls))
 
-    missing = [p for p in paths if p not in dirs]
-    print(f"lessons linked: {len(paths)} · pinned: {', '.join(sorted(s[:7] for s in pins))} · upstream HEAD: {head[:7]}")
-    if not any(head.startswith(s) for s in pins):
-        print("upstream moved since the pin; re-pin when convenient")
-    for p in missing:
-        print(f"MISSING upstream: {p}")
-    sys.exit(1 if missing else 0)
+    dead = [(u, s) for u, s in results if s in DEAD]
+    warn = [(u, s) for u, s in results if s != 200 and s not in DEAD]
+    for u, s in dead:
+        print(f"DEAD {s}: {u}")
+    for u, s in warn:
+        print(f"WARN {s}: {u}")
+    print(f"lesson links: {len(urls)} · ok: {len(urls) - len(dead) - len(warn)} · dead: {len(dead)} · warnings: {len(warn)}")
+    sys.exit(1 if dead else 0)
 
 
 if __name__ == "__main__":
