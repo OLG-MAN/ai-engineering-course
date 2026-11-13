@@ -1,13 +1,13 @@
-name: links
+name: track
 
-# Course platforms move lessons around; catch dead links in the plan early.
+# Upstream renames and removes lessons often; catch TRACK.md drift early.
 on:
   schedule:
     - cron: "0 6 * * 1" # Mondays 06:00 UTC
   workflow_dispatch:
   push:
     branches: [main]
-    paths: ["PLAN.md", "onboarding.md", "README.md"]
+    paths: ["TRACK.md", "scripts/check_track.py"]
 
 permissions:
   contents: read
@@ -20,4 +20,4 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - run: python3 scripts/check_links.py PLAN.md onboarding.md README.md
+      - run: python3 scripts/check_track.py

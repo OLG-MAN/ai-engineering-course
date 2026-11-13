@@ -1,37 +1,37 @@
 # CLAUDE.md
 
-Learning-journal repo for a self-built, 13-week AI Engineering course (5 Oct – 31 Dec 2026). Docs, notes and small exercises; the capstone (OpsCopilot) lives in a separate repo.
+Working repo for the learner's path through the upstream course [AI Engineering from Scratch](https://github.com/rohitg00/ai-engineering-from-scratch) (MIT), plus a GCP track that rebuilds each stage on Google Cloud. Start: Mon 16 Nov 2026, ~20 weeks. The previous self-built plan is archived on branch `archive/v1-curated-plan` (tag `v1-curated-plan`); don't edit it.
 
 ## Key files
 
-- `ai-engineer-course-prompt.md` — the research brief: learner profile, the reference course (robot_dreams "AI Engineering", 55,500 UAH), evaluation criteria and research rules. It produced PLAN.md.
-- `PLAN.md` — source of truth: competency map (C1–C24), 18 lessons in 4 blocks, tool coverage, budget, capstone spec, communities, sources.
-- `progress.md` — weekly table, checkpoints, spend, weekly review log (newest on top).
-- `onboarding.md` — accounts, enrollments, setup checklist.
-- `templates/` — `lesson-note.md`, `lab-note.md`, `weekly-review.md`.
-- `notes/<block>/` — one file per lesson (`LNN-<slug>.md`), lab notes (`LNN-lab-<slug>.md`), `checkpoint-N.md`. Each block folder has a README index.
-- `labs/<slug>/` — re-implementations of course labs. `exercises/<LNN>-<slug>/` — per-lesson tasks.
-- `scripts/check_links.py` — stdlib link checker; `python3 scripts/check_links.py [files]`.
+- `TRACK.md` — source of truth: curated lessons by stage, schedule, status. Lesson links point at a pinned upstream commit.
+- `gcp/README.md` — GCP milestones G1–G6: what to build, which lessons each one upgrades, "done when".
+- `LOG.md` — weekly reviews, newest on top.
+- `lessons/p<NN>-<LL>/` — the learner's notes (`NOTES.md`) and code per lesson. `gcp/g<N>-<slug>/` — one folder per milestone, with its own Terraform stack.
+- `templates/` — `lesson.md`, `gcp-milestone.md`, `weekly-review.md`.
+- `scripts/check_track.py` — checks TRACK.md lesson paths exist at upstream HEAD.
+- Upstream is expected as a sibling clone at `../ai-engineering-from-scratch`. Read lessons from there; never vendor upstream files into this repo.
 
 ## Learner
 
-Senior systems/DevOps engineer (5+ yrs): Python, bash, GCP/AWS, Terraform, Ansible, Docker, K8s, Helm, Flux, Prometheus/Grafana, ELK, Proxmox. Uses Claude Code daily. Goal: AI Engineer or AIOps. ~2 h/day, 5 days/week. Explain new ideas through infra analogies; skip DevOps basics.
+Senior systems/DevOps engineer (5+ yrs): Python, bash, GCP (Professional Cloud Architect) and AWS, Terraform, Ansible, Docker, K8s, Helm, Flux, Prometheus/Grafana, ELK. Uses Claude Code daily. Goal: AI Engineer or AIOps. ~10 h/week. Explain new ideas through infra analogies; skip DevOps and GCP basics. Dislikes lecture-style, surface-level explanations: go to the mechanism and the numbers.
 
 ## Rules
 
 - **Notes are in the learner's own words.** Review, quiz and correct notes; don't write their body text unless asked.
-- **No course material in git:** no notebooks, lab code or graded-assignment solutions from DeepLearning.AI or any course. `labs/` holds re-implementations only.
-- **Model-agnostic by default:** code calls an OpenAI-compatible chat API (hosted, vLLM or Ollama) configured from `.env`. Vendor-specific code only when a lesson is explicitly vendor-specific.
-- **Port course stacks to the learner's:** Weaviate → Qdrant, Oracle → Postgres, LangSmith → Langfuse.
-- **No secrets in git.** Keys live in `.env` (see `.env.example`); pre-commit runs gitleaks.
-- **Commits:** small, Conventional Commits (`docs:`, `feat:`, `chore:`, `notes:` …).
+- **The learner types the lesson code.** Help debug and extend it; don't paste whole upstream solutions into `lessons/`.
+- **Make it real:** after the stub version works, swap stubs for real models/services through an OpenAI-compatible client configured from `.env`. Vendor SDKs only where a lesson or milestone is about that vendor.
+- **GCP:** Terraform for every resource, separate state per milestone, ADC / Workload Identity (no key files), budget alerts on, remind to `terraform destroy` after billable sessions. For model, region, quota, IAM role or flag names that may have changed, give a lookup command instead of asserting.
+- **No secrets or real project IDs in git.** Keys live in `.env`; pre-commit runs gitleaks.
+- **Commits:** small, Conventional Commits (`feat:`, `docs:`, `notes:`, `chore:`, `infra:` …).
+- **Markdown:** don't hard-wrap prose lines.
 
-## Editing PLAN.md
+## Editing TRACK.md
 
-Follow the brief's rules: verify every course, price and link with live search before adding or changing it; never link from memory; mark free / freemium / paid and self-paced / async cohort / live; flag pre-2024 content on agents, MCP or evals; record a "verified on <date>" note in §11. Keep progress.md and the block READMEs in sync when lessons move. Prices: USD and UAH; budget ceiling ≈ 10–15% of 55,500 UAH. Payments from Ukraine: Visa/Mastercard or USDT/USDC.
+Keep the table format (status, ID, linked title, minutes, notes). When upstream renames or removes a lesson, update the path and title and re-pin all links to the new upstream commit. Keep the schedule and the GCP milestone references in sync with `gcp/README.md`.
 
 ## Checks
 
 - `pre-commit run --all-files` — whitespace, YAML, large files, private keys, gitleaks.
-- `python3 scripts/check_links.py PLAN.md onboarding.md README.md` — dead links fail; 403/429 are warnings.
-- CI: `.github/workflows/ci.yml` (pre-commit on push/PR), `links.yml` (weekly + on plan changes).
+- `python3 scripts/check_track.py --upstream ../ai-engineering-from-scratch` — exit 1 if a linked lesson is gone upstream.
+- CI: `.github/workflows/ci.yml` (pre-commit on push/PR), `track.yml` (weekly + on TRACK.md changes).
