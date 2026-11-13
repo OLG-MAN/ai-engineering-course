@@ -25,7 +25,7 @@ GCP milestone after this stage: **G1** (see [gcp/README.md](gcp/README.md#g1)). 
 
 | Status | ID | Lesson | Min | Notes |
 | --- | --- | --- | --- | --- |
-| ⬜ | `p10-01` | [Tokenizers: BPE, WordPiece, SentencePiece](https://aiengineeringfromscratch.com/learn/llms-from-scratch/tokenizers) | 90 |  |
+| 🟨 | `p10-01` | [Tokenizers: BPE, WordPiece, SentencePiece](https://aiengineeringfromscratch.com/learn/llms-from-scratch/tokenizers) | 90 |  |
 | ⬜ | `p07-02` | [Self-Attention from Scratch](https://aiengineeringfromscratch.com/learn/transformers-deep-dive/self-attention-from-scratch) *(opt)* | 90 |  |
 | ⬜ | `p07-12` | [KV Cache, Flash Attention & Inference Optimization](https://aiengineeringfromscratch.com/learn/transformers-deep-dive/kv-cache-flash-attention) *(opt)* | 75 |  |
 | ⬜ | `p11-01` | [Prompt Engineering: Techniques & Patterns](https://aiengineeringfromscratch.com/learn/llm-engineering/prompt-engineering) | 90 |  |
