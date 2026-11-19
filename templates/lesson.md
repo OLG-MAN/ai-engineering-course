@@ -9,6 +9,12 @@
 | Time | upstream estimate min / actual min |
 | Quiz | x / y |
 
+## Questions to answer (my words)
+
+<!-- 5-6 questions from the GUIDE author: mechanism, my measured numbers, and the design decision it changes -->
+
+1.
+
 ## Key ideas (my words)
 
 - Idea — why it matters.

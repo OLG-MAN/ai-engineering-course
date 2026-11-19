@@ -45,7 +45,9 @@ All lesson code runs in one OrbStack container: Python 3.12 + uv venv (`/opt/ven
 | `/workspace/ai-engineering-from-scratch` | course clone (`../ai-engineering-from-scratch`) | read-only |
 | `/cache` | tiktoken / Hugging Face / uv / pre-commit downloads (named volume) | survives `down` and rebuilds |
 
-kubectl inside talks to OrbStack's Kubernetes: the entrypoint copies `~/.kube/config` and points the `orbstack` cluster at `https://kubernetes.default.svc.cluster.local`. `.env` is loaded if present.
+kubectl inside talks to OrbStack's Kubernetes: the entrypoint copies `~/.kube/config` and points the `orbstack` cluster at `https://kubernetes.default.svc.cluster.local`. `.env` is loaded when the container is **created**: after editing it, run `make down && make sh`.
+
+LLM backend for the labs ([lessons/common/llm.py](lessons/common/llm.py)): Gemma 4 26B on the Gemini API free tier by default (AI Studio key in `.env`, see [.env.example](.env.example)); the local MLX server on the Mac (`~/git/mlx-lab`) for the p07 labs and as a free fallback.
 
 **Day to day** (from the repo root on the Mac):
 

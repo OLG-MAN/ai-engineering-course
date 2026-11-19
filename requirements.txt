@@ -2,3 +2,6 @@
 # Add packages as lessons need them, then `make rebuild`.
 tiktoken
 tokenizers
+openai      # OpenAI-compatible client: Gemini API, local MLX, vLLM
+pydantic    # schemas and validation (p11-03 structured outputs)
+numpy       # attention / context lessons (p07-02, p11-05)

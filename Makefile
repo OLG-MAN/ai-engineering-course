@@ -1,5 +1,9 @@
 COMPOSE := docker compose -f .devcontainer/compose.yaml
 
+ifdef AICOURSE_LAB
+$(error You're inside the lab container. Type `exit`, then run `make` on the Mac)
+endif
+
 .PHONY: help up sh down rebuild status nuke
 
 help: ## Show targets

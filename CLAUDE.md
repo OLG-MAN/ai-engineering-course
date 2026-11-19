@@ -11,7 +11,10 @@ Working repo for the learner's path through the upstream course [AI Engineering 
 - `templates/` — `lesson.md`, `gcp-milestone.md`, `weekly-review.md`.
 - `scripts/check_track.py` — checks TRACK.md lesson links still resolve on the website (404 = renamed/removed upstream).
 - Upstream is also cloned as a sibling at `../ai-engineering-from-scratch` (full `code/`, `quiz.json`, `outputs/`). Read lessons there when helping; never vendor upstream files into this repo or edit the clone.
-- `lessons/<id>/GUIDE.md` — Claude's companion guide for a lesson (focus points, errata in the upstream text, the "make it real" task). The learner reads it only when stuck; keep it short.
+- `lessons/<id>/GUIDE.md` — Claude's hands-on lab for each lesson, Skills Boost style: Task 0 start, Task 1 article section ↔ lesson code table + run commands, "make it real" tasks on real infra (OrbStack k8s, real LLM) with predict-first steps, my test run in a `<details>` spoiler, cleanup, errata. Test every command before writing it down.
+- `lessons/<id>/NOTES.md` — the learner's notes; Claude writes only the header, a "Questions to answer" list (mechanism, the learner's measured numbers, the design decision) and empty result tables.
+- `lessons/common/` — `llm.py` (shared OpenAI-compatible client from `.env`, rate-limit waits, strips leaked `<thought>`), `k8s.py` (read-only kubectl), `scenario.sh` (broken namespace: checkout crash loop, reports OOM, search bad image, web healthy, optional billing injection). Labs use namespace `lab-<id>`.
+- LLM backends: default Gemma 4 26B on the Gemini API free tier (`LLM_REASONING_EFFORT=minimal`, otherwise answers come back empty); local MLX server on the Mac (`~/git/mlx-lab`, port 8080, `--chat-template-args '{"enable_thinking":false}'`) for p07 labs and lesson scripts with many calls.
 
 ## Learner
 

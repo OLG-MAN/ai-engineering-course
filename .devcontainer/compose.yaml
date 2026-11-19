@@ -16,6 +16,7 @@ services:
       - ~/.gitconfig:/home/dev/.gitconfig:ro
       - cache:/cache                                                            # downloads survive rebuilds
     environment:
+      AICOURSE_LAB: "1"                 # lets the Makefile refuse to run inside the container
       HF_HOME: /cache/hf
       TIKTOKEN_CACHE_DIR: /cache/tiktoken
       UV_CACHE_DIR: /cache/uv
