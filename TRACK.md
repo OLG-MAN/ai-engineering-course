@@ -10,10 +10,10 @@ Pace ≈ 10 h/week. Upstream time estimates cover reading and typing the code; I
 
 | Weeks | Dates | Stage | Lessons (core) | GCP milestone | Plan h |
 | --- | --- | --- | --- | --- | --- |
-| 1–2 | 16 Nov – 29 Nov 2026 | 1 LLM engineering basics | ~8 h | G1 Vertex AI models | 16 |
+| 1–2 | 16 Nov – 29 Nov 2026 | 1 LLM engineering basics + agent loop | ~9 h | G1 Vertex AI models | 16 |
 | 3–4 | 30 Nov – 13 Dec | 2 Retrieval, RAG, evals | ~7 h | G2 RAG on GCP | 19 |
 | 5–7 | 14 Dec – 3 Jan 2027 | 3 Tools and MCP | ~20 h | G3 MCP on Cloud Run | 32 |
-| 8–11 | 4 Jan – 31 Jan | 4 Agents | ~21 h | G4 Agents on Vertex AI | 37 |
+| 8–11 | 4 Jan – 31 Jan | 4 Agents | ~20 h | G4 Agents on Vertex AI | 37 |
 | 12–16 | 1 Feb – 7 Mar | 5 Production and infrastructure | ~27 h | G5 Serving and ops on GKE | 47 |
 | 17–20 | 8 Mar – 4 Apr | Capstone | ~30 h | G6 AIOps agent on GKE | 40 |
 
@@ -21,7 +21,7 @@ Not in this track on purpose: phases 1–6, 8, 9, 12 (math, classic ML, CV, NLP 
 
 ## Stage 1 — LLM engineering basics
 
-GCP milestone after this stage: **G1** (see [gcp/README.md](gcp/README.md#g1)). Core ≈ 8 h, optional ≈ 3 h.
+GCP milestone after this stage: **G1** (see [gcp/README.md](gcp/README.md#g1)). Core ≈ 9 h, optional ≈ 3 h.
 
 | Status | ID | Lesson | Min | Notes |
 | --- | --- | --- | --- | --- |
@@ -33,6 +33,7 @@ GCP milestone after this stage: **G1** (see [gcp/README.md](gcp/README.md#g1)). 
 | ⬜ | `p11-03` | [Structured Outputs: JSON, Schema Validation, Constrained Decoding](https://aiengineeringfromscratch.com/learn/llm-engineering/structured-outputs) | 90 |  |
 | ⬜ | `p11-05` | [Context Engineering: Windows, Budgets, Memory, and Retrieval](https://aiengineeringfromscratch.com/learn/llm-engineering/context-engineering) | 90 |  |
 | ⬜ | `p11-09` | [Function Calling & Tool Use](https://aiengineeringfromscratch.com/learn/llm-engineering/function-calling) | 75 |  |
+| ⬜ | `p14-01` | [The Agent Loop: Observe, Think, Act](https://aiengineeringfromscratch.com/learn/agent-engineering/the-agent-loop) | 60 | moved here from Stage 4: first full agent loop |
 
 ## Stage 2 — Retrieval, RAG and evals
 
@@ -87,11 +88,10 @@ GCP milestone after this stage: **G3** (see [gcp/README.md](gcp/README.md#g3)). 
 
 ## Stage 4 — Agents
 
-GCP milestone after this stage: **G4** (see [gcp/README.md](gcp/README.md#g4)). Core ≈ 21 h, optional ≈ 8 h.
+GCP milestone after this stage: **G4** (see [gcp/README.md](gcp/README.md#g4)). Core ≈ 20 h, optional ≈ 8 h.
 
 | Status | ID | Lesson | Min | Notes |
 | --- | --- | --- | --- | --- |
-| ⬜ | `p14-01` | [The Agent Loop: Observe, Think, Act](https://aiengineeringfromscratch.com/learn/agent-engineering/the-agent-loop) | 60 |  |
 | ⬜ | `p14-02` | [ReWOO and Plan-and-Execute: Decoupled Planning](https://aiengineeringfromscratch.com/learn/agent-engineering/rewoo-plan-and-execute) | 60 |  |
 | ⬜ | `p14-03` | [Reflexion: Verbal Reinforcement Learning](https://aiengineeringfromscratch.com/learn/agent-engineering/reflexion-verbal-rl) | 60 |  |
 | ⬜ | `p14-05` | [Self-Refine and CRITIC: Iterative Output Improvement](https://aiengineeringfromscratch.com/learn/agent-engineering/self-refine-and-critic) *(opt)* | 60 |  |
