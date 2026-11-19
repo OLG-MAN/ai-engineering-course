@@ -1,0 +1,31 @@
+{
+  "categories": {
+    "OOM": "container killed for exceeding its memory limit",
+    "APP_CRASH": "the application itself exits or panics (bad config, missing dependency, code error)",
+    "IMAGE": "the image cannot be pulled (wrong tag, auth, registry)",
+    "SCHEDULING": "the pod cannot be placed on a node (resources, taints, affinity, quotas)",
+    "PROBE": "a liveness/readiness/startup probe fails",
+    "STORAGE": "volume, PVC, mount or disk problems",
+    "NETWORK": "DNS, service connectivity, timeouts between components",
+    "NORMAL": "routine event, nothing is wrong"
+  },
+  "examples": [
+    {"text": "Warning  Failed  pod/api-5c9d  Failed to pull image \"registry.internal/api:v3\": unauthorized: authentication required", "label": "IMAGE"},
+    {"text": "Warning  FailedScheduling  pod/etl-0  0/3 nodes are available: 3 node(s) had untolerated taint {dedicated: gpu}.", "label": "SCHEDULING"},
+    {"text": "Last State: Terminated  Reason: Error  Exit Code: 1  -- log: panic: runtime error: invalid memory address or nil pointer dereference", "label": "APP_CRASH"}
+  ],
+  "test": [
+    {"text": "Last State: Terminated  Reason: OOMKilled  Exit Code: 137  Limits: memory 128Mi", "label": "OOM"},
+    {"text": "Warning  FailedScheduling  pod/worker-7f  0/4 nodes are available: 4 Insufficient memory. preemption: 0/4 nodes are available.", "label": "SCHEDULING"},
+    {"text": "Warning  Unhealthy  pod/web-6b  Liveness probe failed: HTTP probe failed with statuscode: 500. Container web failed liveness probe, will be restarted. Last State: Terminated Exit Code: 137", "label": "PROBE"},
+    {"text": "Warning  BackOff  pod/checkout-77  Back-off restarting failed container -- log: ERROR config key DATABASE_URL is not set, exiting", "label": "APP_CRASH"},
+    {"text": "Warning  Failed  pod/search-9d  Error: ImagePullBackOff (nginx:9.99-does-not-exist: not found)", "label": "IMAGE"},
+    {"text": "Warning  FailedMount  pod/db-0  MountVolume.SetUp failed for volume \"data\": PersistentVolumeClaim \"data-db-0\" not found", "label": "STORAGE"},
+    {"text": "log: dial tcp: lookup redis.cache.svc.cluster.local on 10.96.0.10:53: no such host", "label": "NETWORK"},
+    {"text": "Normal  Pulled  pod/web-6b  Successfully pulled image \"nginx:1.27-alpine\" in 1.2s", "label": "NORMAL"},
+    {"text": "Warning  Unhealthy  pod/api-2c  Readiness probe failed: Get \"http://10.0.1.7:8080/ready\": dial tcp 10.0.1.7:8080: connect: connection refused", "label": "PROBE"},
+    {"text": "Warning  Evicted  pod/batch-1  The node was low on resource: ephemeral-storage. Container batch was using 12Gi, which exceeds its request of 0.", "label": "STORAGE"},
+    {"text": "Warning  FailedCreate  replicaset/api-5c  Error creating: pods \"api-5c-x\" is forbidden: exceeded quota: team-quota, requested: limits.cpu=2, used: limits.cpu=8, limited: limits.cpu=9", "label": "SCHEDULING"},
+    {"text": "log: upstream timed out (110: Connection timed out) while reading response header from upstream, upstream: \"http://10.0.3.4:8080/api\"", "label": "NETWORK"}
+  ]
+}
